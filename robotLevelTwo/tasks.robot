@@ -15,12 +15,15 @@ Library             RPA.PDF
 Library             RPA.Archive
 Library             RPA.Dialogs
 Library             OperatingSystem
+Library             Collections
+Library             RPA.Robocorp.Vault
 
 
 *** Tasks ***
 Main
     # https://robotsparebinindustries.com/orders.csv
-    ${url}=    Input form dialog
+    ${welcome}=    Get Secret    DataSales
+    ${url}=    Input form dialog    ${welcome}
     Download order website    ${url}
     Open web site form
     ${table}=    Read CSV file
@@ -81,8 +84,10 @@ Take a screenshot
     RPA.Browser.Selenium.Screenshot    ${element}    ${OUTPUT_DIR}${/}orders${/}${num}.png
 
 Input form dialog
+    [Arguments]    ${welcome}
     Add heading    Input URL csv orders
-    Add text input    url    label=Url
+    Add text    Welcome ${welcome}[user]
+    Add text input    url    label=Url csv:
     ${result}=    Run dialog
     RETURN    ${result.url}
 
